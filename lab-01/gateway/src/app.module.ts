@@ -10,12 +10,9 @@ import { GraphQLModule } from '@nestjs/graphql';
       server: {
         cors: true,
         context: ({ req }) => {
-          return {
-            headers: req.headers,
-          };
+          return { headers: req.headers };
         },
       },
-
       gateway: {
         supergraphSdl: new IntrospectAndCompose({
           subgraphs: [
@@ -26,7 +23,7 @@ import { GraphQLModule } from '@nestjs/graphql';
         buildService: ({ url }) => {
           return new RemoteGraphQLDataSource({
             url,
-            willSendRequest: ({ request, context }) => {
+            willSendRequest({ request, context }) {
               request.http.headers.set(
                 'authorization',
                 context?.['headers']?.['authorization'],
